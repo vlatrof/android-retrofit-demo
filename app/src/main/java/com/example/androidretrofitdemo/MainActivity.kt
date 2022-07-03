@@ -2,7 +2,9 @@ package com.example.androidretrofitdemo
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,46 +13,55 @@ import com.example.androidretrofitdemo.repository.Repository
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var textView: TextView
+
+    private lateinit var etEnterReqId: TextView
+    private lateinit var btnSendReq: Button
+    private lateinit var tvResponse: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        init()
+    }
+    
+    private fun init() {
 
-        textView = findViewById(R.id.tv_response)
+        // init views
+        etEnterReqId = findViewById(R.id.et_enter_req_id)
+        btnSendReq = findViewById(R.id.btn_send_req)
+        tvResponse = findViewById(R.id.tv_response)
 
-        // init
+        // init ViewModel
         val repository = Repository()
         val mainViewModelFactory = MainViewModelFactory(repository)
         mainViewModel =
             ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
-        mainViewModel.getPost()
 
-        //start to observe
-        mainViewModel.myResponse.observe(this, Observer{ response ->
-
+        // start to observe ViewModel LiveData
+        mainViewModel.responsePostsByUserId.observe(this, Observer { response ->
             // код выполнится при изменении обозреваемых данных
-
             if (response.isSuccessful) {
-
-                Log.d("Response", response.body()?.id.toString())
-                Log.d("Response", response.body()?.userId.toString())
-                Log.d("Response", response.body()?.title!!)
-                Log.d("Response", response.body()?.body!!)
-
-                textView.text = response.body()?.title!!
-
+                tvResponse.text = response.body().toString()
             } else {
-
-                Log.d("Response", response.errorBody().toString())
-
-                textView.text = response.code().toString()
-
+                tvResponse.text = response.code().toString()
             }
-
         })
 
-    }
+        //set onClickListener to button to send request
+        btnSendReq.setOnClickListener {
 
+            if (etEnterReqId.text.toString() == "") {
+                Toast.makeText(applicationContext, "Please enter ID", Toast.LENGTH_SHORT).show()
+            } else {
+                mainViewModel.getPostsByUserId(
+                    userId = Integer.parseInt(etEnterReqId.text.toString()),
+                    sort = "id",
+                    order = "desc"
+                )
+            }
+
+        }
+
+    }
 
 }

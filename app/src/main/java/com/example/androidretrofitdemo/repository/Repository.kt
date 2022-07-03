@@ -6,8 +6,16 @@ import retrofit2.Response
 
 class Repository {
 
-    suspend fun getPost() : Response<PostModel> {
-        return RetrofitInstance.api.getPost()
+    suspend fun getFirstPost(): Response<PostModel> {
+        return RetrofitInstance.api.getFirstPost()
+    }
+
+    suspend fun getPostById(id: Int): Response<PostModel> {
+        return RetrofitInstance.api.getPostById(id)
+    }
+
+    suspend fun getPostsByUserId(userId: Int, sort: String, order: String): Response<List<PostModel>> {
+        return RetrofitInstance.api.getPostsByUserId(userId, sort, order)
     }
 
 }
