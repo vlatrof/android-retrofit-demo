@@ -24,4 +24,17 @@ class Repository {
         return RetrofitInstance.api.getPostsByUserIdByMapOfOptions(userId, options)
     }
 
+    suspend fun pushPost(post: PostModel): Response<PostModel> {
+        return RetrofitInstance.api.pushPost(post)
+    }
+
+    suspend fun pushPostFormUrlEncoded(post: PostModel): Response<PostModel> {
+        return RetrofitInstance.api.pushPostFormUrlEncoded(
+            post.id,
+            post.userId,
+            post.title,
+            post.body
+        )
+    }
+
 }

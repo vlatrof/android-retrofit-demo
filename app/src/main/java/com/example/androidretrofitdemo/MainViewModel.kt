@@ -14,6 +14,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val responsePostById: MutableLiveData<Response<PostModel>> = MutableLiveData()
     val responsePostsByUserId: MutableLiveData<Response<List<PostModel>>> = MutableLiveData()
     val responsePostsByUserIdByMapOfOptions: MutableLiveData<Response<List<PostModel>>> = MutableLiveData()
+    val responsePushPost: MutableLiveData<Response<PostModel>> = MutableLiveData()
+    val responsePushPostFormUrlEncoded: MutableLiveData<Response<PostModel>> = MutableLiveData()
 
     fun getFirstPost() {
         viewModelScope.launch {
@@ -40,6 +42,20 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.getPostsByUserIdByMapOfOptions(userId, options)
             responsePostsByUserIdByMapOfOptions.value = response
+        }
+    }
+
+    fun pushPost(post: PostModel) {
+        viewModelScope.launch {
+            val response = repository.pushPost(post)
+            responsePushPost.value = response
+        }
+    }
+
+    fun pushPostFormUrlEncoded(post: PostModel) {
+        viewModelScope.launch {
+            val response = repository.pushPostFormUrlEncoded(post)
+            responsePushPostFormUrlEncoded.value = response
         }
     }
 

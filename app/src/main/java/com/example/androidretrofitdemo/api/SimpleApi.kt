@@ -2,10 +2,7 @@ package com.example.androidretrofitdemo.api
 
 import com.example.androidretrofitdemo.model.PostModel
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 
 // Реализацию для этого интерфейса мы не пишем
 // Ее создаст автоматически retrofit
@@ -42,5 +39,25 @@ interface SimpleApi {
         @Query("userId") userId: Int,
         @QueryMap options: Map<String, String>
     ): Response<List<PostModel>>
+
+    // Стандартный POST-запрос по адресу base.url/posts/
+    @POST("posts")
+    suspend fun pushPost(
+        @Body post: PostModel
+    ): Response<PostModel>
+
+    // POST-запрос по адресу base.url/posts/
+    // данные отправляются как пары ключ значение
+    // в строке запроса разделенные &
+    @FormUrlEncoded
+    @POST("posts")
+    suspend fun pushPostFormUrlEncoded(
+        @Field("id") id: Int,
+        @Field("userId") userId: Int,
+        @Field("title") title: String,
+        @Field("body") body: String,
+    ): Response<PostModel>
+
+
 
 }

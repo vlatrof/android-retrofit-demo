@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidretrofitdemo.adapter.PostAdapterForRV
+import com.example.androidretrofitdemo.model.PostModel
 import com.example.androidretrofitdemo.repository.Repository
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -28,11 +29,13 @@ class MainActivity : AppCompatActivity() {
         val mainViewModelFactory = MainViewModelFactory(repository)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
 
-        mainViewModel.getPostsByUserId(1, "id", "desc")
-        mainViewModel.responsePostsByUserId.observe(this, Observer { response ->
+        mainViewModel.pushPost(PostModel(7889,4784,"eva edet v vavilon", "abrakadabra"))
+        mainViewModel.responsePushPost.observe(this, Observer { response ->
 
             if (response.isSuccessful) {
-                response.body()?.let { postAdapterForRV.setList(it) }
+                var arrlist: ArrayList<PostModel> = ArrayList()
+                arrlist.add(response.body()!!)
+                postAdapterForRV.setList(arrlist)
             } else {
                 Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
             }
