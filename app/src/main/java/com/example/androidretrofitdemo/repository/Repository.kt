@@ -18,4 +18,10 @@ class Repository {
         return RetrofitInstance.api.getPostsByUserId(userId, sort, order)
     }
 
+    suspend fun getPostsByUserIdByMapOfOptions(
+        userId: Int, options: Map<String, String>): Response<List<PostModel>> {
+
+        return RetrofitInstance.api.getPostsByUserIdByMapOfOptions(userId, options)
+    }
+
 }

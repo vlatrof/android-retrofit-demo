@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 // Реализацию для этого интерфейса мы не пишем
 // Ее создаст автоматически retrofit
@@ -32,9 +33,14 @@ interface SimpleApi {
         @Query("_order") order: String,
     ): Response<List<PostModel>>
 
+    // Запрос ниже использует @QueryMap, в котором можно задавать пары параметров
+    // Например _sort->id и _order->desc (2 пары) и т. д.
+    // В данном случае такая форма записи сокращает предыдущую форму и дает возможности
+    // для дальнейшего расширения списка параметров (options) запроса без изменения кода в данном интерфейсе
     @GET("posts")
-    suspend fun getPostsByUserIdByMappingParameters(
-        @Query("userId") userId: Int
+    suspend fun getPostsByUserIdByMapOfOptions(
+        @Query("userId") userId: Int,
+        @QueryMap options: Map<String, String>
     ): Response<List<PostModel>>
 
 }
