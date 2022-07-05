@@ -1,2 +1,2 @@
-# Android application demonstrating basic Android Retrofit functionality
+# Android application demonstrating basic Android type safe REST client Retrofit functionality
 
