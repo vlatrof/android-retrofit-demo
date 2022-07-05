@@ -24,9 +24,9 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun getPostById(id: Int) {
+    fun getPostById(id: Int, auth: String) {
         viewModelScope.launch {
-            val response = repository.getPostById(id)
+            val response = repository.getPostById(id, auth)
             responsePostById.value = response
         }
     }

@@ -11,14 +11,24 @@ import retrofit2.http.*
 interface SimpleApi {
 
     // Запрос для получения первого поста
+    // В данном случае с помощью аннотации @Headers
+    // мы добавляем заголовки в http запрос
+    @Headers(
+        "Authorization: 123123123",
+        "Platform: Android",
+
+    )
     @GET("posts/1")
     suspend fun getFirstPost(): Response<PostModel>
 
     // Запрос для получения поста по его ID
-    // Аннотация Path заменит в пути запроса {postId} на указанный нами Int
+    // Аннотация Path заменит в пути запроса {postId} на указанное нами значение
+    // В данном случае с помощью аннотации @Header мы добавляем заголовок
+    // в http запрос динамически как параметр
     @GET("posts/{postId}")
     suspend fun getPostById(
-        @Path("postId") id: Int
+        @Path("postId") id: Int,
+        @Header("Auth") auth: String
     ): Response<PostModel>
 
     // Запрос для полчения всех постов пользователя по его ID
@@ -31,7 +41,7 @@ interface SimpleApi {
     ): Response<List<PostModel>>
 
     // Запрос ниже использует @QueryMap, в котором можно задавать пары параметров
-    // Например _sort->id и _order->desc (2 пары) и т. д.
+    // Например _sort:id и _order:desc (2 пары) и т. д.
     // В данном случае такая форма записи сокращает предыдущую форму и дает возможности
     // для дальнейшего расширения списка параметров (options) запроса без изменения кода в данном интерфейсе
     @GET("posts")

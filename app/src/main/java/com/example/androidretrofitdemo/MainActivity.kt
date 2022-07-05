@@ -29,14 +29,20 @@ class MainActivity : AppCompatActivity() {
         val mainViewModelFactory = MainViewModelFactory(repository)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
 
-        // send request and start observe
+        // send request to viewModel to send post request and
+        // start observe liveData in viewModel for response
         mainViewModel.pushPostFormUrlEncoded(PostModel(7889,4784,"eva edet v vavilon", "abrakadabra"))
         mainViewModel.responsePushPostFormUrlEncoded.observe(this, Observer { response ->
 
             if (response.isSuccessful) {
-                var arrlist: ArrayList<PostModel> = ArrayList()
-                arrlist.add(response.body()!!)
-                postAdapterForRV.setList(arrlist)
+
+                val arrList = ArrayList<PostModel>().apply {
+                    add(response.body()!!)
+                    add(PostModel(0,0,"${response.headers()}",""))
+                }
+
+                postAdapterForRV.setList(arrList)
+
             } else {
                 Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
             }
