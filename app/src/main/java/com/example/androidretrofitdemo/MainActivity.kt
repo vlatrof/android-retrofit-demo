@@ -29,8 +29,9 @@ class MainActivity : AppCompatActivity() {
         val mainViewModelFactory = MainViewModelFactory(repository)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
 
-        mainViewModel.pushPost(PostModel(7889,4784,"eva edet v vavilon", "abrakadabra"))
-        mainViewModel.responsePushPost.observe(this, Observer { response ->
+        // send request and start observe
+        mainViewModel.pushPostFormUrlEncoded(PostModel(7889,4784,"eva edet v vavilon", "abrakadabra"))
+        mainViewModel.responsePushPostFormUrlEncoded.observe(this, Observer { response ->
 
             if (response.isSuccessful) {
                 var arrlist: ArrayList<PostModel> = ArrayList()
